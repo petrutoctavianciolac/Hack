@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard</title>
+    <link rel="stylesheet" href="/static/avizier.css">
+</head>
+<body>
+    <div class="button-container">
+        <button class="backButton" onclick="window.location.href='/templates/startPage';">Înapoi</button>
+    </div>
+    <div class="container">
+        <h1>Scoreboard</h1>
+        <div class="scoreboard-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Nume</th>
+                        <th>Puncte</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Iterează prin scorurile din baza de date -->
+                    {% for score in scores %}
+                        <tr>
+                            <td><img src="{{ score.avatar }}" alt="Avatar" class="avatar"></td>
+                            <td>{{ score.nume }}</td>
+                            <td>{{ score.puncte }} puncte</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

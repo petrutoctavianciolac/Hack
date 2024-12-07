@@ -251,3 +251,29 @@ messageModal.addEventListener("click", (event) => {
         messageModal.style.display = "none"; // Close the modal
     }
 });
+
+/*----------------SCHIMBARE SCOR ATUNCI CAND DAU ACCEPT */
+
+// Funcția care va fi apelată la click pe butonul Accept
+document.getElementById("acceptButton").addEventListener("click", function() {
+    // Realizează o cerere AJAX pentru a actualiza scorul
+    fetch('/update_score', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ vecin_id: 1, puncte: 100 }) // Trimite vecin_id și punctele de adăugat
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Scorul a fost actualizat!');
+            location.reload(); // Reîncarcă pagina pentru a vedea actualizarea scorului
+        } else {
+            alert('A apărut o eroare: ' + data.error);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+

@@ -39,8 +39,8 @@ def print_requests_table(conn_str): #print cererile mele
 
         # Execută interogarea SQL pentru a prelua datele din tabelul 'requests'
         cursor.execute("""
-            SELECT [id], [vecin_id], [titlu], [descriere], [status], [data_cerere]
-            FROM [general].[dbo].[requests]
+            SELECT *
+            FROM [general].[dbo].[scoreboard]
         """)
 
         # Preia toate rândurile
@@ -65,7 +65,6 @@ def print_requests_table(conn_str): #print cererile mele
     finally:
         if conn:
             conn.close()
-
 
 
 
@@ -165,6 +164,27 @@ def avizier():
         return render_template('error.html', error=str(e))
 
 
+@app.route("/templates/score", methods=["GET"])
+def scoreboard():
+    try:
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, nume, puncte, avatar FROM [general].[dbo].[scoreboard] ORDER BY puncte DESC")
+        scores = cursor.fetchall()
+        formatted_scores = []
+        for score in scores:
+            formatted_scores.append({
+                'nume': score[1],
+                'puncte': score[2],
+                'avatar': score[3]
+            })
+        conn.close()
+        return render_template('score.html', scores=formatted_scores)
+    except pyodbc.Error as e:
+        print(f"Error: {e}")
+        return render_template('error.html', error=str(e))
+
+
 @app.route("/templates/startPage", methods=["GET"])
 def toStart():
     if request.method == "GET":
@@ -185,6 +205,38 @@ def show_request_form():
     return render_template('pagina_cerere.html')  # Afișează formularul
 
 """
+@app.route("/update_score", methods=["POST"])
+def update_score():
+    try:
+        # Obține datele trimise de la client
+        data = request.get_json()
+        vecin_id = data.get('vecin_id')  # Vecinul care acceptă
+        puncte = data.get('puncte')  # Punctele de adăugat (100 în acest caz)
+
+        # Conectare la baza de date
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
+
+        # Actualizează punctele vecinului în tabela 'neighbors'
+        cursor.execute("""
+            UPDATE [dbo].[neighbors]
+            SET puncte = puncte + ?
+            WHERE id = ?
+        """, (puncte, vecin_id))
+
+        # Comite modificările în baza de date
+        conn.commit()
+
+        # Închide conexiunea la baza de date
+        conn.close()
+
+        # Răspunde cu succes
+        return jsonify({"success": True})
+
+    except pyodbc.Error as e:
+        print(f"Error: {e}")
+        return jsonify({"success": False, "error": str(e)})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
