@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Aici se definește viewport-ul -->
+    <title>Cererile Mele</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cererile Mele</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titlu Cerere</th>
+                <th>Status</th>
+                <th>Data Creare</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.titlu }}</td>
+                    <td>{{ row.status }}</td>
+                    <td>{{ row.data_cerere }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Nu există cereri disponibile.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
