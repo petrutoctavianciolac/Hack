@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bun venit, {{name}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+
+<body class="background">
+    <div class="container">
+
+        </div>
+
+        <div class="form-container">
+            <div class="header">Bună, {{name}}!</div>
+            
+            <button class="button" onclick="window.location.href='/templates/pagina_cerere';">Trimite cerere</button>
+            <button class="button" onclick="window.location.href='/templates/avizier';">Avizier</button>
+            <button class="button">Comunitate</button>
+            <button class="button">Întrebări</button>
+            <button class="button"onclick="window.location.href='/templates/myrequests';">Cererile Mele</button>
+        </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

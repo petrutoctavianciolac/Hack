@@ -1,5 +1,5 @@
 import pyodbc
-from flask import Flask, render_template
+from flask import Flask, flash, jsonify, render_template, request
 
 # Define the connection string
 conn_str = (
@@ -9,7 +9,7 @@ conn_str = (
     "Trusted_Connection=yes;"  # This uses Windows Authentication
 )
 
-# Function to fetch data from the database
+# check in console part
 def fetch_data_from_db(conn_str, query):
     try:
         # Connect to the database
@@ -31,7 +31,7 @@ def fetch_data_from_db(conn_str, query):
     finally:
         if conn:
             conn.close()
-def print_requests_table(conn_str):
+def print_requests_table(conn_str): #print cererile mele
     try:
         # Conectează-te la baza de date
         conn = pyodbc.connect(conn_str)
@@ -66,8 +66,11 @@ def print_requests_table(conn_str):
         if conn:
             conn.close()
 
-# Apelarea funcției pentru a printa tabelul 'requests'
-print_requests_table(conn_str)
+
+
+
+# Apelarea funcției pentru a printa tabelul 'requests' print_requests_table(conn_str)
+
 # Flask app setup
 app = Flask(__name__)
 
@@ -98,6 +101,90 @@ def cererile_mele():
     finally:
         if conn:
             conn.close()
+
+@app.route("/templates/pagina_cerere", methods=["GET", "POST"])
+def submit_request():
+    if request.method == "GET":
+        return render_template('pagina_cerere.html')  # Afișează formularul
+    
+    try:
+        # Obține datele din formularul POST (nu JSON)
+        titlu = request.form['titlu']
+        descriere = request.form['descriere']
+
+        # Conectare la baza de date
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
+
+        # Interogare SQL pentru a insera cererea în tabelul 'requests'
+        cursor.execute("""
+            INSERT INTO [dbo].[requests] ([vecin_id], [titlu], [descriere], [status])
+            VALUES (?, ?, ?, ?)
+        """, (1, titlu, descriere, 'În așteptare'))  # Vecinul are id=1
+
+        # Commit modificările în baza de date
+        conn.commit()
+
+        # Răspuns de succes
+        #return jsonify({"success": True})
+        
+        return render_template('pagina_cerere.html')
+
+    except pyodbc.Error as e:
+        print(f"Error: {e}")
+        return jsonify({"success": False, "error": str(e)})
+
+    finally:
+        if conn:
+            conn.close()
+
+@app.route("/templates/avizier", methods=["GET"])
+def avizier():
+    try:
+        # Conectare la baza de date
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
+
+        # Interogare SQL pentru a selecta datele din tabelul 'requests'
+        cursor.execute("""
+            SELECT TOP 5 [id], [vecin_id], [titlu], [descriere], [status], [data_cerere]
+            FROM [general].[dbo].[requests]
+        """)
+
+        # Obține toate cererile din baza de date
+        requests = cursor.fetchall()
+
+        # Închide conexiunea la baza de date
+        conn.close()
+
+        # Transmite cererile către template-ul HTML
+        return render_template('avizier.html', requests=requests)
+
+    except pyodbc.Error as e:
+        print(f"Error: {e}")
+        return render_template('error.html', error=str(e))
+
+
+@app.route("/templates/startPage", methods=["GET"])
+def toStart():
+    if request.method == "GET":
+        return render_template('startPage.html')  # Afișează formularul
+    
+@app.route("/templates/avizier", methods=["GET"])
+def toAvizier():
+    if request.method == "GET":
+        return render_template('avizier.html')  # Afișează formularul
+
+
+"""
+@app.route("/templates/pagina_cerere")
+def index():
+    return render_template('pagina_cerere.html')
+@app.route("/templates/pagina_cerere", methods=["GET"])
+def show_request_form():
+    return render_template('pagina_cerere.html')  # Afișează formularul
+
+"""
 
 if __name__ == '__main__':
     app.run(debug=True)
