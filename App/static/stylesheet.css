@@ -30,7 +30,7 @@ body {
 /* Buton */
 .form-container .button {
     padding: 10px 20px;
-    margin: 10px 0;
+    margin: 25px 0;
     background-color: #007BFF;
     color: white;
     border: none;
@@ -64,3 +64,98 @@ body {
     background-attachment: fixed;
 }
 
+/* Stiluri pentru câmpurile de input */
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Etichete pentru câmpuri */
+label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.footer a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.form-container {
+    background: #fff;
+    padding: 20px;
+    width: 600px;
+    height: 500px; /* Înălțimea fixă pentru scroll în interior */
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    overflow-y: auto; /* Scroll doar în interiorul acestui container */
+    box-sizing: border-box;
+
+    background-image: 
+    linear-gradient(to bottom, #e0e0e0 1px, transparent 1px),
+    linear-gradient(to right, #e0e0e0 1px, transparent 1px);
+    background-size: 100% 40px, 40px 100%;
+}
+
+/* Scroll bar personalizat */
+.form-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.form-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.form-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.form-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.button {
+    background-color: #007BFF;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
