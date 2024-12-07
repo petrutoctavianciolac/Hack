@@ -10,38 +10,12 @@ body {
     height: 100vh;
 }
 
-/* Container principal */
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-/* Imaginile laterale */
-.sketch-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
-.sketch-container img {
-    max-width: 300px; /* Dimensiune fixă pentru imagine */
-    height: auto;
-}
-
 /* Container pentru formular */
 .form-container {
     background: #fff;
     padding: 30px;
     border-radius: 12px;
     max-width: 400px;
-    margin: 20px auto;
     font-family: Arial, sans-serif;
     position: relative;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
@@ -53,6 +27,7 @@ body {
     background-size: 100% 40px, 40px 100%;
 }
 
+/* Buton */
 .form-container .button {
     padding: 10px 20px;
     margin: 10px 0;
@@ -70,6 +45,7 @@ body {
     background-color: #0056b3;
 }
 
+/* Header */
 .header {
     font-weight: bold;
     font-size: 24px;
@@ -80,3 +56,11 @@ body {
     z-index: 1;
     text-align: center;
 }
+
+.background {
+    background-image: url("../static/images/fundal.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
