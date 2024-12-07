@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bun venit, {{name}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sketch-container left">
+            <img src="{{ url_for('static', filename='images/left-image.jpg') }}" alt="Stânga" width="400" height="600">
+        </div>
+
+        <div class="form-container">
+            <div class="header">Bună, {{name}}!</div>
+            <button class="button">Trimite cerere</button>
+            <button class="button">Avizier</button>
+            <button class="button">Întrebări</button>
+            <button class="button">Cererile mele</button>
+        </div>
+
+        <div class="sketch-container right">
+            <img src="{{ url_for('static', filename='images/right-image.jpg') }}" alt="Dreapta" width="400" height="600">
+        </div>
+    </div>
+</body>
+
+</html>
