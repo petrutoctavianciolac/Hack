@@ -37,22 +37,20 @@ body {
 
 /* Container pentru formular */
 .form-container {
-    flex: 0 0 300px; /* Dimensiune fixă pentru formular */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 400px;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    position: relative;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 
-.form-container .header {
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
+    /* Adaugă linii subtile pentru efectul hârtiei */
+    background-image: 
+        linear-gradient(to bottom, #e0e0e0 1px, transparent 1px),
+        linear-gradient(to right, #e0e0e0 1px, transparent 1px);
+    background-size: 100% 40px, 40px 100%;
 }
 
 .form-container .button {
@@ -70,4 +68,15 @@ body {
 
 .form-container .button:hover {
     background-color: #0056b3;
+}
+
+.header {
+    font-weight: bold;
+    font-size: 24px;
+    padding: 10px 0;
+    line-height: 1.5;
+    color: #333;
+    position: relative;
+    z-index: 1;
+    text-align: center;
 }
