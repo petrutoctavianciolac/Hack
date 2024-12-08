@@ -145,7 +145,7 @@ def toStart():
 def avizier():
     try:
         # ID-ul vecinului curent
-        vecin_id = 1
+        vecin_id = loggedId
 
         # Conectare la baza de date
         conn = pyodbc.connect(conn_str)
