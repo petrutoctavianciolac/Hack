@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Aici se definește viewport-ul -->
+    <title>Cererile Mele</title>
+    <link rel="stylesheet" href="/static/avizier.css">
+
+</head>
+<body>
+    <div class="button-container">
+        <button class="backButton" onclick="window.location.href='/templates/startPage';">Înapoi</button>
+    </div>
+    <h1>Cererile Mele</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titlu Cerere</th>
+                <th>Status</th>
+                <th>Data Creare</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    <td>{{ row.titlu }}</td>
+                    <td>{{ row.status }}</td>
+                    <td>{{ row.data_cerere }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Nu există cereri disponibile.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
