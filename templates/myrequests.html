@@ -17,16 +17,15 @@
             <tr>
                 <th>ID</th>
                 <th>Titlu Cerere</th>
-                <th>Status</th>
-                <th>Data Creare</th>
+                <th>Descriere</th>
             </tr>
         </thead>
         <tbody>
             {% for row in rows %}
                 <tr>
+                    <td>{{ row.id }}</td>
                     <td>{{ row.titlu }}</td>
-                    <td>{{ row.status }}</td>
-                    <td>{{ row.data_cerere }}</td>
+                    <td>{{ row.descriere }}</td>
                 </tr>
             {% else %}
                 <tr>

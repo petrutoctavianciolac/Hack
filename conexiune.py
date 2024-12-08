@@ -1,5 +1,6 @@
 import pyodbc
 from flask import Flask, flash, jsonify, render_template, request
+from flask_cors import CORS
 
 # Define the connection string
 conn_str = (
@@ -72,34 +73,8 @@ def print_requests_table(conn_str): #print cererile mele
 
 # Flask app setup
 app = Flask(__name__)
+CORS(app)
 
-@app.route('/templates/myrequests')
-def cererile_mele():
-    try:
-        conn = pyodbc.connect(conn_str)
-        cursor = conn.cursor()
-
-        # Execută SQL pentru a prelua cererile
-        cursor.execute("""
-            SELECT [id], [titlu], [descriere],[status]
-            FROM [general].[dbo].[requests]
-        """)
-
-        # Preia rezultatele
-        rows = cursor.fetchall()
-
-        if not rows:
-            return "Nu există cereri disponibile."
-
-        # Redirecționează către template cu datele
-        return render_template('myrequests.html', rows=rows)
-
-    except pyodbc.Error as e:
-        return f"Error: {e}"
-
-    finally:
-        if conn:
-            conn.close()
 
 @app.route("/templates/pagina_cerere", methods=["GET", "POST"])
 def submit_request():
@@ -110,6 +85,7 @@ def submit_request():
         # Obține datele din formularul POST (nu JSON)
         titlu = request.form['titlu']
         descriere = request.form['descriere']
+        categorie = request.form['categorie']
 
         # Conectare la baza de date
         conn = pyodbc.connect(conn_str)
@@ -117,16 +93,14 @@ def submit_request():
 
         # Interogare SQL pentru a insera cererea în tabelul 'requests'
         cursor.execute("""
-            INSERT INTO [dbo].[requests] ([vecin_id], [titlu], [descriere], [status])
-            VALUES (?, ?, ?, ?)
-        """, (1, titlu, descriere, 'În așteptare'))  # Vecinul are id=1
+            INSERT INTO [dbo].[requests] ([vecin_id], [titlu], [descriere], [tag], [status])
+            VALUES (?, ?, ?, ?, ?)
+        """, (1, titlu, descriere, categorie, 'În așteptare'))  # Vecinul are id=1
 
         # Commit modificările în baza de date
         conn.commit()
 
         # Răspuns de succes
-        #return jsonify({"success": True})
-        
         return render_template('pagina_cerere.html')
 
     except pyodbc.Error as e:
@@ -137,31 +111,6 @@ def submit_request():
         if conn:
             conn.close()
 
-@app.route("/templates/avizier", methods=["GET"])
-def avizier():
-    try:
-        # Conectare la baza de date
-        conn = pyodbc.connect(conn_str)
-        cursor = conn.cursor()
-
-        # Interogare SQL pentru a selecta datele din tabelul 'requests'
-        cursor.execute("""
-            SELECT TOP 5 [id], [vecin_id], [titlu], [descriere], [status], [data_cerere]
-            FROM [general].[dbo].[requests]
-        """)
-
-        # Obține toate cererile din baza de date
-        requests = cursor.fetchall()
-
-        # Închide conexiunea la baza de date
-        conn.close()
-
-        # Transmite cererile către template-ul HTML
-        return render_template('avizier.html', requests=requests)
-
-    except pyodbc.Error as e:
-        print(f"Error: {e}")
-        return render_template('error.html', error=str(e))
 
 
 @app.route("/templates/score", methods=["GET"])
@@ -169,7 +118,7 @@ def scoreboard():
     try:
         conn = pyodbc.connect(conn_str)
         cursor = conn.cursor()
-        cursor.execute("SELECT id, nume, puncte, avatar FROM [general].[dbo].[scoreboard] ORDER BY puncte DESC")
+        cursor.execute("SELECT id, nume, puncte, avatar FROM [general].[dbo].[neighbors] ORDER BY puncte DESC")
         scores = cursor.fetchall()
         formatted_scores = []
         for score in scores:
@@ -191,9 +140,102 @@ def toStart():
         return render_template('startPage.html')  # Afișează formularul
     
 @app.route("/templates/avizier", methods=["GET"])
-def toAvizier():
-    if request.method == "GET":
-        return render_template('avizier.html')  # Afișează formularul
+def avizier():
+    try:
+        # ID-ul vecinului curent
+        vecin_id = 1
+
+        # Conectare la baza de date
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
+
+        # 1. Obține abilitatea/tag-ul vecinului curent
+        cursor.execute("SELECT abilitati FROM [general].[dbo].[neighbors] WHERE id = ?", vecin_id)
+        abilitate = cursor.fetchone()[0]  # Presupunem că abilitatea este un singur string (ex: "Reparatii")
+        print(f'Abilitate vecin: {abilitate}')  # Afișează abilitatea în consolă pentru debug
+
+        # 2. Obține cererile care au același tag ca abilitatea vecinului
+        cursor.execute("""
+            SELECT titlu, descriere, tag FROM [general].[dbo].[requests]
+            WHERE [tag] = ? AND [status] = 'Pending'
+        """, abilitate)
+        cereri_tag = cursor.fetchall()
+        print(cereri_tag)
+        # 3. Obține restul cererilor
+        cursor.execute("""
+            SELECT titlu, descriere, tag FROM [general].[dbo].[requests]
+            WHERE [tag] != ? AND [status] = 'Pending'
+        """, abilitate)
+        alte_cereri = cursor.fetchall()
+        print(alte_cereri)
+        # Combină cererile: cererile cu tag-ul potrivit vor apărea primele
+        cereri = cereri_tag + alte_cereri
+
+        # Returnează cererile către șablon
+        return render_template("avizier.html", requests=cereri)
+
+    except pyodbc.Error as e:
+        print(f"Error: {e}")
+        return jsonify({"success": False, "error": str(e)})
+
+    except Exception as e:
+        # Capturăm orice altă eroare posibilă
+        print(f"Unexpected error: {e}")
+        return jsonify({"success": False, "error": str(e)})
+
+    finally:
+        if conn:
+            conn.close()
+
+@app.route('/accept_request', methods=['POST'])
+def accept_request():
+    try:
+        # Debug: Printează întregul formular pentru a vedea ce date sunt primite
+        print("Form Data:", request.form)
+
+        # Obținem ID-ul cererii din formular
+        ticket_id = request.form.get('ticket_id', None)
+        print("tichetul este: ", ticket_id)
+
+        if ticket_id is None:
+            return "Ticket ID nu a fost trimis corespunzător.", 400
+
+        # Conectare la baza de date
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
+
+        # Actualizare status cerere DUPA TITLU
+        cursor.execute("""
+            UPDATE [general].[dbo].[requests]
+            SET [status] = 'Acceptata'
+            WHERE [titlu] = ?
+        """, (ticket_id,))
+
+        cursor.execute("""
+            UPDATE [general].[dbo].[neighbors]
+            SET [puncte] = [puncte] + 100
+            WHERE [id] = 1
+        """)
+
+
+
+        # Salvează modificările în baza de date
+        conn.commit()
+
+        # Poți adăuga aici logica de redirecționare sau renderizare
+        return render_template("startPage.html")
+
+    except pyodbc.Error as e:
+        print(f"Error: {e}")
+        return "A apărut o eroare la procesarea cererii.", 500
+
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return "A apărut o eroare.", 500
+
+    finally:
+        if conn:
+            conn.close()
 
 
 """
@@ -203,39 +245,40 @@ def index():
 @app.route("/templates/pagina_cerere", methods=["GET"])
 def show_request_form():
     return render_template('pagina_cerere.html')  # Afișează formularul
+@app.route("/templates/avizier", methods=["GET"])
+def toAvizier():
+    if request.method == "GET":
+        return render_template('avizier.html')  # Afișează formularul
 
 """
-@app.route("/update_score", methods=["POST"])
-def update_score():
+@app.route('/templates/myrequests')
+def cererile_mele():
     try:
-        # Obține datele trimise de la client
-        data = request.get_json()
-        vecin_id = data.get('vecin_id')  # Vecinul care acceptă
-        puncte = data.get('puncte')  # Punctele de adăugat (100 în acest caz)
-
-        # Conectare la baza de date
         conn = pyodbc.connect(conn_str)
         cursor = conn.cursor()
 
-        # Actualizează punctele vecinului în tabela 'neighbors'
+        # Execută SQL pentru a prelua cererile
         cursor.execute("""
-            UPDATE [dbo].[neighbors]
-            SET puncte = puncte + ?
-            WHERE id = ?
-        """, (puncte, vecin_id))
+            SELECT [id], [titlu], [descriere],[status]
+            FROM [general].[dbo].[requests]
+            WHERE status = 'Acceptata'
+        """)
 
-        # Comite modificările în baza de date
-        conn.commit()
+        # Preia rezultatele
+        rows = cursor.fetchall()
 
-        # Închide conexiunea la baza de date
-        conn.close()
+        if not rows:
+            return "Nu există cereri disponibile."
 
-        # Răspunde cu succes
-        return jsonify({"success": True})
+        # Redirecționează către template cu datele
+        return render_template('myrequests.html', rows=rows)
 
     except pyodbc.Error as e:
-        print(f"Error: {e}")
-        return jsonify({"success": False, "error": str(e)})
+        return f"Error: {e}"
+
+    finally:
+        if conn:
+            conn.close()
 
 
 if __name__ == '__main__':

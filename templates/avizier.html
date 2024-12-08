@@ -14,26 +14,27 @@
     <div class="container">
         <h1>Avizier</h1>
         <div class="avizier">
-            <!-- Iterează prin cererile din baza de date și le afișează -->
             {% for request in requests %}
-                <div class="ticket">
+            <form action="/accept_request" method="POST" class="ticket-form">
+                <div class="ticket" data-id="{{ request.id }}">
                     <div class="ticket-title">{{ request.titlu }}</div>
                     <div class="ticket-description">{{ request.descriere }}</div>
                     <div class="ticket-status">{{ request.status }}</div>
-                    <div class="ticket-date">{{ request.data_cerere }}</div>
+                    <div class="ticket-tag">{{ request.tag }}</div>
+    
+                    <!-- ID-ul cererii ca input ascuns -->
+                    <input type="hidden" name="ticket_id" value="{{ request.titlu }}">
+
+                    <!-- Butonul accept pentru fiecare cerere -->
+                    <button type="submit" class="acceptButton">Accept</button>
                 </div>
+            </form>
             {% endfor %}
         </div>
     </div>
+    
+    
 
-    <!-- Modal for showing message details -->
-    <div id="messageModal" class="modal">
-        <div class="modal-content">
-            <h2 id="modalTitle">Titlu mesaj</h2>
-            <p id="modalDescription">Descriere mesaj</p>
-            <button id="acceptButton">Accept</button>
-        </div>
-    </div>
 
     <script src="/static/script.js"></script>
 </body>
