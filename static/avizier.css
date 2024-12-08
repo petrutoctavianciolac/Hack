@@ -12,6 +12,13 @@ body {
     background-position: center;
     background-repeat: no-repeat;
 }
+body.creare-eveniment {
+    background-color: #e0f7fa; /* Fundal mai deschis, culoare apă */
+    background-image: url('/static/images/fundal_form.jpg'); /* Imaginea pentru Creare Eveniment */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 
 .container {
     text-align: center;
@@ -21,12 +28,16 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 800px;
+    
+    
 }
+
 
 h1 {
     font-size: 24px;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+    
 }
 
 form {
@@ -54,10 +65,10 @@ input, textarea {
 /* Stilul vechi al butonului, modificat să arate ca button-19 */
 button {
     appearance: button;
-    background-color: #1899D6;
-    border: solid transparent;
-    border-radius: 16px;
-    border-width: 0 0 4px;
+    background-color: #f28477;
+    border: none;
+    border-radius: 16px; /* Colțuri rotunjite mai mult */
+    border-bottom: 4px solid #fb9f95; /* Marginea de jos pentru efectul 3D */
     box-sizing: border-box;
     color: #FFFFFF;
     cursor: pointer;
@@ -75,32 +86,11 @@ button {
     text-transform: uppercase;
     touch-action: manipulation;
     transform: translateZ(0);
-    transition: filter .2s;
+    transition: background-color 0.2s, transform 0.1s;
     user-select: none;
-    -webkit-user-select: none;
-    vertical-align: middle;
     white-space: nowrap;
     width: 100%;
-}
-
-button:after {
-    background-clip: padding-box;
-    background-color: #1CB0F6;
-    border: solid transparent;
-    border-radius: 16px;
-    border-width: 0 0 4px;
-    bottom: -4px;
-    content: "";
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index: -1;
-}
-
-button,
-button:focus {
-    user-select: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Umbra mai închisă pentru buton */
 }
 
 button:hover:not(:disabled) {
@@ -108,6 +98,16 @@ button:hover:not(:disabled) {
     -webkit-filter: brightness(1.1);
 }
 
+button:disabled {
+    cursor: auto;
+    opacity: 0.6;
+}
+
+/* Efectul de apăsare pentru buton */
+button:active {
+    transform: translateY(2px); /* Simulează apăsarea butonului */
+    border-bottom: 2px solid #f4948a; /* Marginea devine mai mică */
+}
 button:disabled {
     cursor: auto;
 }
@@ -189,6 +189,7 @@ button:active {
 }
 /*INAPOI*/
 /* Stilizare pentru containerul butonului */
+
 .button-container {
     position: fixed;  /* Fixează containerul pe pagină */
     top: 20px;        /* Plasează-l la 20px de sus */
@@ -199,7 +200,7 @@ button:active {
 
 /* Stilizare pentru butonul „Înapoi” */
 .backButton {
-    background-color: #1899D6;  /* Culoare de fundal */
+    background-color: #e07366;  /* Culoare de fundal */
     color: #fff;                /* Culoare text */
     padding: 10px 20px;         /* Dimensiuni ale butonului */
     border-radius: 8px;         /* Margini rotunjite */
@@ -210,7 +211,7 @@ button:active {
 }
 
 .backButton:hover {
-    background-color: #1CB0F6;  /* Culoare mai închisă la hover */
+    background-color: #e07366;  /* Culoare mai închisă la hover */
 }
 
 
@@ -226,7 +227,8 @@ button:active {
 }
 
 .ticket {
-    background-color: #ffeeba;
+    /*background-color: #ffeeba;*/
+    background-image: url('/static/images/sticker1.jpg');
     padding: 15px 20px;
     border: 1px solid #ffc107;
     border-radius: 8px;
@@ -308,4 +310,57 @@ tr:hover {
     font-size: 14px;
     color: #333;
     font-weight: bold;
+}
+
+
+
+/* Containerele principale pentru tabel */
+.scoreboard-table {
+    max-width: 1000px; /* Crește lățimea tabelului */
+    
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Umbra pentru un efect 3D */
+    overflow: hidden;
+    border: 1px solid #ddd; /* Linii subtiri de bordura pentru tabel */
+}
+
+/* Stilizarea tabelului */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Elimină spațiile între celule */
+}
+
+/* Stilizarea antetului */
+th {
+    background-color: #cc5f4e; /* Culoare de fundal albastru */
+    color: #fff; /* Text alb */
+    padding: 20px;
+    text-align: left;
+    font-size: 18px; /* Crește dimensiunea fontului pentru antet */
+    font-weight: bold; /* Text bold */
+    letter-spacing: 1px;
+    text-transform: uppercase; /* Text mare pentru titluri */
+}
+
+/* Stilizarea rândurilor din corpul tabelului */
+td {
+    padding: 18px; /* Crește padding-ul pentru celule */
+    border-bottom: 1px solid #f4f4f4;
+    font-size: 16px; /* Crește dimensiunea fontului pentru celule */
+    color: #333;
+    text-align: left;
+    font-weight: bold; /* Text bold */
+}
+
+/* Stilizare pentru rândurile impare */
+tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; /* Rânduri gri deschis */
+}
+
+/* Efecte hover pentru fiecare rând */
+tbody tr:hover {
+    background-color: #ecf0f1; /* Culoare de fundal mai deschisă */
+    cursor: pointer; /* Schimbă cursorul la pointer */
 }

@@ -1,6 +1,7 @@
 import pyodbc
-from flask import Flask, flash, jsonify, render_template, request
+from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from flask_cors import CORS
+loggedId = None
 
 # Define the connection string
 conn_str = (
@@ -74,6 +75,7 @@ def print_requests_table(conn_str): #print cererile mele
 # Flask app setup
 app = Flask(__name__)
 CORS(app)
+app.secret_key = 'secret_key'
 
 
 @app.route("/templates/pagina_cerere", methods=["GET", "POST"])
@@ -95,7 +97,7 @@ def submit_request():
         cursor.execute("""
             INSERT INTO [dbo].[requests] ([vecin_id], [titlu], [descriere], [tag], [status])
             VALUES (?, ?, ?, ?, ?)
-        """, (1, titlu, descriere, categorie, 'În așteptare'))  # Vecinul are id=1
+        """, (loggedId, titlu, descriere, categorie, 'Pending'))  # Vecinul are id=1
 
         # Commit modificările în baza de date
         conn.commit()
@@ -214,8 +216,8 @@ def accept_request():
         cursor.execute("""
             UPDATE [general].[dbo].[neighbors]
             SET [puncte] = [puncte] + 100
-            WHERE [id] = 1
-        """)
+            WHERE [id] =?
+        """, (loggedId))
 
 
 
@@ -261,14 +263,14 @@ def cererile_mele():
         cursor.execute("""
             SELECT [id], [titlu], [descriere],[status]
             FROM [general].[dbo].[requests]
-            WHERE status = 'Acceptata'
-        """)
+            WHERE status = 'Acceptata' AND vecin_id = ?
+        """, (loggedId))
 
         # Preia rezultatele
         rows = cursor.fetchall()
 
         if not rows:
-            return "Nu există cereri disponibile."
+            return render_template('myrequests.html')
 
         # Redirecționează către template cu datele
         return render_template('myrequests.html', rows=rows)
@@ -279,6 +281,222 @@ def cererile_mele():
     finally:
         if conn:
             conn.close()
+
+@app.route("/templates/pagina_event", methods=["GET"])
+def toEvent():
+    return render_template('pagina_event.html')  # Afișează formularul
+#--------------------------EVENIMENTE----------------------------------------
+@app.route("/templates/viewEvents", methods=["GET"])
+def toViewEvent():
+    try:
+        # Conectare la baza de date
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
+
+        # Execută interogarea pentru a obține toate evenimentele din baza de date
+        cursor.execute("SELECT nume, descriere, data, locatie FROM [dbo].[evenimente]")
+
+        # Preluăm toate rândurile din baza de date
+        events = cursor.fetchall()
+
+        # Trimitem evenimentele către template pentru afișare
+        return render_template('viewEvents.html', events=events)
+
+    except pyodbc.Error as e:
+        print(f"Eroare SQL: {e}")
+        return "A apărut o eroare la preluarea evenimentelor.", 500
+
+    finally:
+        # Închidem conexiunea la baza de date
+        if conn:
+            conn.close()
+
+@app.route("/adauga_eveniment", methods=["POST"])
+def adauga_eveniment():
+    try:
+        # Obține datele din formular
+        titlu = request.form['titlu']
+        descriere = request.form['descriere']
+        data = request.form['data']
+        locatie = request.form['locatie']
+
+        # Conectare la baza de date
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
+
+        # Interogare SQL pentru a insera evenimentul în tabelul "evenimente"
+        cursor.execute("""
+            INSERT INTO [dbo].[evenimente] ([nume], [descriere], [data], [locatie])
+            VALUES (?, ?, ?, ?)
+        """, (titlu, descriere, data, locatie))
+
+        # Confirmăm modificările
+        conn.commit()
+
+        # Redirecționează la pagina evenimentelor după succes
+        return redirect('/templates/pagina_event')
+
+    except pyodbc.Error as e:
+        print(f"Eroare SQL: {e}")
+        return jsonify({"success": False, "error": str(e)})
+
+    finally:
+        if conn:
+            conn.close()
+
+#---------------------------------LOG IN--------------------------------------------------------
+@app.route('/create_account', methods=['GET', 'POST'])
+def create_account():
+    conn = pyodbc.connect(conn_str)
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        # Preluarea datelor din formular
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        bloc = request.form.get('bloc')
+        strada = request.form.get('strada')
+        varsta = request.form.get('varsta')
+        telefon = request.form.get('telefon')
+        apartament = request.form.get('apartament')
+        detalii = request.form.get('detalii')
+
+        cursor.execute("SELECT nume FROM dbo.neighbors WHERE nume = ?", (name,))
+        exista = cursor.fetchall()
+
+        # Compară parolele
+        if password != confirm_password:
+            flash('Parolele nu se potrivesc!', 'error')
+            return redirect(url_for('create_account'))
+        
+        if exista:
+            flash('Vecinul este deja inregistrat!', 'error')
+            return redirect(url_for('create_account'))
+
+        try:
+            # Inserarea datelor în baza de date
+            cursor.execute(
+                """INSERT INTO dbo.neighbors (nume, email, bloc, varsta, strada, telefon, apartament, abilitati,puncte)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (name, email, bloc, varsta, strada, telefon, apartament, detalii,0)
+            )
+
+            conn.commit()  # Confirmă salvarea în baza de date
+
+            cursor.execute("SELECT id FROM dbo.neighbors WHERE nume = ?", (name,))
+            vecin_id = cursor.fetchone()
+
+            if vecin_id:
+                # Adaugă parola în tabela `dbo.passwords`
+                cursor.execute("INSERT INTO dbo.passwords (vecin_id, parola_hash) VALUES (?, ?)", (vecin_id[0], password))
+                conn.commit()  # Confirmă salvarea parolei în baza de date
+
+
+            flash('Contul a fost creat cu succes!', 'success')
+            return redirect(url_for('create_account'))
+
+        except Exception as e:
+            flash(f'Eroare la crearea contului: {str(e)}', 'error')
+            return redirect(url_for('create_account'))
+
+    return render_template("createAccount.html")
+
+@app.route("/home")
+def home():
+    conn = pyodbc.connect(conn_str)
+    cursor = conn.cursor()
+
+    if loggedId is None:
+        flash('Te rog să te loghezi!', 'error')
+        return redirect(url_for('login'))
+
+    try:
+        user_query = "SELECT nume FROM dbo.neighbors WHERE id = ?"
+        cursor.execute(user_query, (loggedId,))
+        user = cursor.fetchone()
+
+        if user:
+            user_name = user[0]
+            print(f"Logged user: {user_name}")
+            return render_template("startPage.html", name=user_name)
+        else:
+            flash('User not found în baza de date!', 'error')
+            return redirect(url_for('login'))
+
+    except Exception as e:
+        print(f"Database error: {str(e)}")
+        return redirect(url_for('login'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    conn = pyodbc.connect(conn_str)
+    cursor = conn.cursor()
+
+    global loggedId
+    if request.method == 'POST':
+        password = request.form.get('password')
+        name = request.form.get('username')
+        print(name)
+
+        try:
+            cursor = conn.cursor()
+
+            # Caută utilizatorul în baza de date din tabelul 'neighbors'
+            query = "SELECT id, nume FROM dbo.neighbors WHERE nume = ?"
+            cursor.execute(query, (name,))
+            
+            user = cursor.fetchone()
+
+            if user:
+                user_id = user[0]  # Obține ID-ul (cheia primară)
+                print(f"User ID: {user_id}")
+
+                # Verifică parola din tabelul 'passwords'
+                query = "SELECT * FROM dbo.passwords WHERE vecin_id = ? AND parola_hash = ?"
+                cursor.execute(query, (user_id, password))
+
+                valid = cursor.fetchone()
+
+                if valid:
+                    loggedId = user_id
+                    flash('Login successful!', 'success')
+                    return redirect(url_for('home'))
+                else:
+                    flash('Invalid password.', 'danger')
+
+            else:
+                flash('Username not found.', 'danger')
+
+        except Exception as e:
+            flash(f'Database Error: {str(e)}', 'danger')
+
+    return render_template('login.html')
+
+#--------------------EVENIMENTE-----------------------------
+@app.route('/evenimente', methods=['GET'])
+def evenimente():
+    try:
+        # Conectează-te la baza de date
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
+
+        # Preia toate evenimentele din baza de date
+        cursor.execute("SELECT nume, descriere, data, locatie FROM evenimente") 
+        events = cursor.fetchall()  # Se preiau evenimentele
+
+        # Închide conexiunea la baza de date
+        conn.close()
+
+        # Transmite datele către template
+        return render_template('evenimente.html', events=events)
+    
+    except Exception as e:
+        print(f"Error: {e}")
+        return "A apărut o eroare la încărcarea evenimentelor.", 500
+
 
 
 if __name__ == '__main__':

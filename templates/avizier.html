@@ -4,36 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avizier</title>
-    <link rel="stylesheet" href="/static/avizier.css">
+    <link rel="stylesheet" href="/static/ale.css">
 </head>
 <body>
     <div class="button-container">
         <button class="backButton" onclick="window.location.href='/templates/startPage';">Înapoi</button>
     </div>
 
-    <div class="container">
-        <h1>Avizier</h1>
-        <div class="avizier">
+    <div class="avizier-container">
+        
+        <div class="avizier-content">
             {% for request in requests %}
             <form action="/accept_request" method="POST" class="ticket-form">
                 <div class="ticket" data-id="{{ request.id }}">
-                    <div class="ticket-title">{{ request.titlu }}</div>
-                    <div class="ticket-description">{{ request.descriere }}</div>
-                    <div class="ticket-status">{{ request.status }}</div>
-                    <div class="ticket-tag">{{ request.tag }}</div>
-    
-                    <!-- ID-ul cererii ca input ascuns -->
-                    <input type="hidden" name="ticket_id" value="{{ request.titlu }}">
+                    <div class = "ticket-content">
+                        <div class="ticket-title">{{ request.titlu }}</div>
+                        <div class="ticket-description">{{ request.descriere }}</div>
+                        <div class="ticket-status">{{ request.status }}</div>
+                        <div class="ticket-tag">{{ request.tag }}</div>
+                        
+                        <!-- ID-ul cererii ca input ascuns -->
+                        <input type="hidden" name="ticket_id" value="{{ request.titlu }}">
 
-                    <!-- Butonul accept pentru fiecare cerere -->
-                    <button type="submit" class="acceptButton">Accept</button>
-                </div>
+                        <!-- Butonul accept pentru fiecare cerere -->
+                        <button type="submit" class="acceptButton">Accept</button>
+                    </div>
+            </div>
             </form>
             {% endfor %}
         </div>
     </div>
-    
-    
+
+
 
 
     <script src="/static/script.js"></script>

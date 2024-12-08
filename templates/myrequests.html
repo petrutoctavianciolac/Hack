@@ -11,11 +11,11 @@
     <div class="button-container">
         <button class="backButton" onclick="window.location.href='/templates/startPage';">Înapoi</button>
     </div>
-    <h1>Cererile Mele</h1>
+    
+    <div class="scoreboard-table">
     <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Titlu Cerere</th>
                 <th>Descriere</th>
             </tr>
@@ -23,7 +23,6 @@
         <tbody>
             {% for row in rows %}
                 <tr>
-                    <td>{{ row.id }}</td>
                     <td>{{ row.titlu }}</td>
                     <td>{{ row.descriere }}</td>
                 </tr>
@@ -34,5 +33,6 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
 </body>
 </html>

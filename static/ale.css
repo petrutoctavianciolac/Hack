@@ -1,0 +1,449 @@
+/* Stiluri generale pentru body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f9;
+    background-image: url('/static/images/fundal.jpg'); /* Înlocuiește cu URL-ul imaginii tale */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Containerul principal cu umbră mai accentuată și colțuri mai rotunjite */
+.container {
+    text-align: center;
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 16px; /* Colțuri rotunjite mai mult */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5); /* Umbra mai puternică și mai închisă */
+    width: 100%;
+    max-width: 400px;
+    z-index: 10;
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Formulare */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 14px;
+    text-align: left;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+input, textarea {
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 12px; /* Colțuri rotunjite mai mult */
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Umbra mai închisă pentru input-uri și textarea */
+}
+
+/* Stil pentru butonul general */
+button {
+    appearance: button;
+    background-color: #f28477;
+    border: none;
+    border-radius: 16px; /* Colțuri rotunjite mai mult */
+    border-bottom: 4px solid #fb9f95; /* Marginea de jos pentru efectul 3D */
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: din-round, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    line-height: 20px;
+    margin: 0;
+    outline: none;
+    overflow: visible;
+    padding: 13px 16px;
+    text-align: center;
+    text-transform: uppercase;
+    touch-action: manipulation;
+    transform: translateZ(0);
+    transition: background-color 0.2s, transform 0.1s;
+    user-select: none;
+    white-space: nowrap;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Umbra mai închisă pentru buton */
+}
+
+button:hover:not(:disabled) {
+    filter: brightness(1.1);
+    -webkit-filter: brightness(1.1);
+}
+
+button:disabled {
+    cursor: auto;
+    opacity: 0.6;
+}
+
+/* Efectul de apăsare pentru buton */
+button:active {
+    transform: translateY(2px); /* Simulează apăsarea butonului */
+    border-bottom: 2px solid #f4948a; /* Marginea devine mai mică */
+}
+
+/* Stiluri pentru butonul Accept */
+#acceptButton {
+    appearance: button;
+    background-color: #28a745; /* Culoare inițială */
+    border: none;
+    border-radius: 16px; /* Colțuri rotunjite mai mult */
+    border-bottom: 4px solid #1c7430; /* Marginea de jos pentru efectul 3D */
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: din-round, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    line-height: 20px;
+    margin: 0;
+    outline: none;
+    overflow: visible;
+    padding: 13px 16px;
+    text-align: center;
+    text-transform: uppercase;
+    touch-action: manipulation;
+    transform: translateZ(0);
+    transition: background-color 0.3s, transform 0.1s;
+    user-select: none;
+    white-space: nowrap;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Umbra mai puternică pentru butonul accept */
+}
+
+/* Starea hover pentru butonul Accept */
+#acceptButton:hover:not(:disabled) {
+    background-color: #218838; /* Culoare mai închisă la hover */
+}
+
+/* Efectul de apăsare pentru butonul Accept */
+#acceptButton:active {
+    transform: translateY(2px); /* Simulează apăsarea butonului */
+    border-bottom: 2px solid #1c7430; /* Marginea devine mai mică */
+    background-color: #1e7e34; /* Schimbă culoarea complet */
+}
+
+/* Când butonul este acceptat */
+#acceptButton.accepted {
+    background-color: #6c757d; /* Culoare gri pentru starea acceptată */
+    border-bottom: 4px solid #5a6268; /* Marginea gri închis */
+}
+
+/* Hover pentru butonul Accept în starea acceptată */
+#acceptButton.accepted:hover {
+    background-color: #5a6268; /* Culoare mai închisă la hover */
+}
+
+/* Avizier */
+.avizier {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Ticket */
+.ticket {
+    /*background-color: #ffeeba;*/
+    background-image: url('/static/images/sticker1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 15px 20px;
+    
+    border-radius: 8px;
+    
+    cursor: pointer;
+    max-width: 200px;
+    text-align: center;
+
+}
+
+.ticket:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5); /* Umbra mai pronunțată pe hover */
+}
+
+.ticket-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 16px; /* Colțuri rotunjite mai mult */
+    max-width: 400px;
+    width: 80%;
+    text-align: center;
+}
+
+/* Fundal pentru Cerere Ajutor */
+body.cerere-ajutor {
+    background-color: #f4f4f9; /* Fundal deschis */
+    background-image: url('/static/images/fundal_form.jpg'); /* Imaginea pentru Cerere Ajutor */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Fundal pentru Creare Eveniment */
+body.creare-eveniment {
+    background-color: #e0f7fa; /* Fundal mai deschis, culoare apă */
+    background-image: url('/static/images/fundal_form.jpg'); /* Imaginea pentru Creare Eveniment */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Stiluri pentru Avizier Special */
+.avizier-special {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+    background-image: url('avizier_fundal.jpg'); /* Înlocuiește cu imaginea personalizată */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 20px;
+    border-radius: 16px; /* Colțuri rotunjite */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); /* Umbra pentru avizier */
+}
+
+/* Stiluri pentru fiecare Ticket în avizierul special */
+.ticket-special {
+    background-color: #f0f8ff;
+    padding: 15px;
+    border: 1px solid #87ceeb;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    max-width: 220px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ticket-special:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5); /* Umbra mai pronunțată pe hover */
+}
+
+.ticket-special .ticket-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+
+.button-container {
+    position: fixed;  /* Fixează containerul pe pagină */
+    top: 20px;        /* Plasează-l la 20px de sus */
+    left: 50%;        /* Plasează-l pe mijlocul paginii */
+    transform: translateX(-50%); /* Ajustează pentru a-l centra pe orizontală */
+    z-index: 1000;    /* Asigură-te că este deasupra altor elemente */
+}
+
+
+.avizier-container {
+    background-image: url('/static/images/avizier_fundal.jpg'); /* Imaginea avizierului */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 800px; /* Dimensiune fixă */
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Umbra exterioară */
+    border-radius: 16px;
+    position: relative;
+    margin-top: 10px;
+}
+
+/* Conținutul anunțurilor */
+.avizier-content {
+    width: 90%;
+    height: 90%;
+    padding: 20px;
+    background-color: transparent;  /* Fundal alb semi-transparent */
+    border-radius: 12px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+#categorie {
+    width: 200px; /* Lățimea elementului */
+    padding: 10px; /* Spațiu interior */
+    border: 1px solid #ccc; /* Bordura gri deschis */
+    border-radius: 5px; /* Colțuri rotunjite */
+    background-color: #f9f9f9; /* Fundal deschis */
+    font-size: 16px; /* Mărimea textului */
+    color: #333; /* Culoarea textului */
+    cursor: pointer; /* Cursorul devine pointer */
+}
+
+/* Pătratele cu opțiuni (dropdown) */
+#categorie:focus {
+    border-color: #4CAF50; /* Bordura devine verde când elementul este selectat */
+    background-color: #fff; /* Fundal alb când selectul este activ */
+}
+
+/* Opțiunile din dropdown */
+#categorie option {
+    padding: 10px; /* Spațiu interior */
+    background-color: #fff; /* Fundal alb pentru opțiuni */
+    color: #333; /* Culoare text opțiuni */
+    border: none; /* Elimină borderul implicit */
+}
+
+/* Culoare pentru opțiunea selectată */
+#categorie option:selected {
+    background-color: #4CAF50; /* Fundal verde pentru opțiunea selectată */
+    color: white; /* Culoare albă pentru textul selectat */
+}
+
+/* Stil pentru hover pe opțiuni */
+#categorie option:hover {
+    background-color: #f1f1f1; /* Fundal deschis când se trece cu mouse-ul pe opțiune */
+}
+
+.ticket {
+    
+    background-image: url('/static/images/sticker1.png'); /* Imaginea de fundal */
+    background-size: contain; /* Asigură că imaginea se potrivește cu containerul */
+    background-position: center; /* Centrează imaginea */
+    background-repeat: no-repeat; /* Evită repetarea imaginii */
+    display: flex; /* Flexbox pentru a alinia textul */
+    justify-content: center; /* Centrează conținutul pe orizontală */
+    align-items: center; /* Centrează conținutul pe verticală */
+    padding: 20px; /* Adaugă un pic de padding */
+    color: white; /* Culoarea textului */
+    border-radius: 16px; /* Colțuri rotunjite */
+    
+    position: relative; /* Permite poziționarea absolută a elementelor de text */
+    width: 300px; /* Lățimea se adaptează automat la dimensiunea imaginii */
+    height: 300px; /* Înălțimea se adaptează automat la dimensiunea imaginii */
+    max-width: 600px; /* Lățimea maximă pentru a nu depăși un anumit dimensiune */
+}
+
+.ticket-content {
+    width: 80%;
+    height: 60%; /* Se adaptează la 90% din înălțimea părintelui */
+    padding: 30px; /* Adaugă padding în jurul conținutului */
+    background-color:transparent; /* Fundal alb semi-transparent */
+    border-radius: 12px; /* Colțuri rotunjite */
+    overflow-y: auto; /* Permite derularea verticală, dacă este necesar */
+    display: flex; /* Folosește flexbox pentru alinierea elementelor */
+    flex-wrap: wrap; /* Permite ruperea pe mai multe linii */
+    gap: 15px; /* Spațiu între elemente */
+    justify-content: center; /* Centrează conținutul pe orizontală */
+    
+    position: relative; /* Permite poziționarea absolută a elementelor interne, dacă este necesar */
+}
+
+.ticket-description {
+    color: #333;
+}
+.ticket-tag {
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    margin-top: 2px;
+    
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+.scoreboard-table {
+    max-width: 1000px; /* Crește lățimea tabelului */
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Umbra pentru un efect 3D */
+    overflow: hidden;
+    border: 1px solid #ddd; /* Linii subtiri de bordura pentru tabel */
+}
+
+/* Stilizarea tabelului */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Elimină spațiile între celule */
+}
+
+/* Stilizarea antetului */
+th {
+    background-color: #cc5f4e; /* Culoare de fundal albastru */
+    color: #fff; /* Text alb */
+    padding: 20px;
+    text-align: left;
+    font-size: 18px; /* Crește dimensiunea fontului pentru antet */
+    font-weight: bold; /* Text bold */
+    letter-spacing: 1px;
+    text-transform: uppercase; /* Text mare pentru titluri */
+}
+
+/* Stilizarea rândurilor din corpul tabelului */
+td {
+    padding: 18px; /* Crește padding-ul pentru celule */
+    border-bottom: 1px solid #f4f4f4;
+    font-size: 16px; /* Crește dimensiunea fontului pentru celule */
+    color: #333;
+    text-align: left;
+    font-weight: bold; /* Text bold */
+}
+
+/* Stilizare pentru rândurile impare */
+tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; /* Rânduri gri deschis */
+}
+
+/* Efecte hover pentru fiecare rând */
+tbody tr:hover {
+    background-color: #ecf0f1; /* Culoare de fundal mai deschisă */
+    cursor: pointer; /* Schimbă cursorul la pointer */
+}

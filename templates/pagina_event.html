@@ -4,28 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creare Event</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/ale.css">
 </head>
-<body>
+<div class="button-container">
+    <button class="back-button" onclick="window.location.href='/templates/startPage';">Înapoi</button>
+</div>
+
+<body class = "creare-eveniment">
     <div class="container">
         <h1>Creare Event</h1>
-        <form id="eventForm">
+        <form id="eventForm" action="/adauga_eveniment" method="POST">
             <label for="titlu">Titlu:</label>
             <input type="text" id="titlu" name="titlu" placeholder="Introdu titlul evenimentului..." required>
-
+        
             <label for="descriere">Descriere:</label>
             <textarea id="descriere" name="descriere" placeholder="Descrie evenimentul..." required></textarea>
-
+        
             <label for="data">Data:</label>
             <input type="date" id="data" name="data" required>
-
+        
             <label for="locatie">Locație:</label>
             <input type="text" id="locatie" name="locatie" placeholder="Introdu locația evenimentului..." required>
-
+        
             <button type="submit">Crează Eveniment</button>
-        </form>
+        </form>  
     </div>
+
     <script src="script.js"></script>
 </body>
+
 </html>
     

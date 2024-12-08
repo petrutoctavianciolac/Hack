@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vizualizare Evenimente</title>
+    <link rel="stylesheet" href="/static/avizier.css">
+</head>
+<body class = "creare-eveniment">
+    <div class="button-container">
+        <button class="backButton" onclick="window.location.href='/templates/startPage';">Înapoi</button>
+    </div>
+    <div class="container">
+        <h1>Vezi Evenimente</h1>
+        <div class="scoreboard-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nume</th>
+                        <th>Descriere</th>
+                        <th>Data</th>
+                        <th>Locație</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Iterează prin evenimentele din baza de date -->
+                    {% for event in events %}
+                        <tr>
+                            <td>{{ event.nume }}</td>
+                            <td>{{ event.descriere }}</td>
+                            <td>{{ event.data }}</td>
+                            <td>{{ event.locatie }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

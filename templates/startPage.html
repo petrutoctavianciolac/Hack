@@ -5,25 +5,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bun venit, {{name}}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+    <link rel="stylesheet" href="/static/ale.css">
+    <style>
+        /* Încărcarea fontului Brolimo (TTF) */
+        @font-face {
+            font-family: 'Brolimo';
+            src: url('calea_catre_font/Brolimo.ttf') format('truetype'); /* Calea către fișierul TTF */
+        }
+
+        /* Stilizare generală */
+        body {
+            margin: 0;
+            font-family: 'Brolimo', monospace; /* Folosește fontul Brolimo */
+            background-color: #f5f5f5;
+            padding: 0;
+            width: 100%;
+        }
+
+        /* Meniu sus */
+        .menu {
+            display: flex;
+            justify-content: flex-start; /* Butoanele sunt aliniate la stânga */
+            background-color: transparent; /* Bara de meniu transparentă */
+            padding: 10px 20px;
+            position: fixed; /* Fixează meniul în partea de sus */
+            top: 0;
+            left: 0;
+            width: 100%; /* Bara de meniu va ocupa întreaga lățime */
+            z-index: 1000; /* Asigură că meniul este deasupra altor elemente */
+        }
+
+        .menu a {
+            color: #7a1f2f; /* Nuanță de roz */
+            text-decoration: none;
+            padding: 10px 15px; /* Dimensiuni ajustate pentru a fi mai strânse */
+            font-size: 1rem;
+            position: relative;
+            letter-spacing: 0.5px; /* Spațiu mai mic între litere, pentru text mai strâns */
+            margin-right: 10px; /* Distanța între butoane */
+        }
+
+        /* Linie sub fiecare buton */
+        .menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%; /* Plasăm linia în mijlocul butonului */
+            transform: translateX(-50%); /* Ajustăm linia să fie centrată */
+            width: 60%; /* Linia va ocupa 60% din lățimea butonului */
+            height: 2px; /* Grosimea liniei */
+            background-color: transparent; /* Transparentă implicit */
+            transition: background-color 0.3s ease; /* Adăugăm o tranziție pentru culoare */
+        }
+
+        /* Culoare linie când butonul este selectat sau la hover */
+        .menu a:hover::after {
+            background-color: #a72f45; /* Culoarea roz la hover */
+        }
+
+        .menu a:hover {
+            background-color: transparent; /* Nu schimbăm fundalul la hover, doar linia */
+        }
+
+        /* Adaptare pentru mobil */
+        @media (max-width: 768px) {
+            .menu {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .menu a {
+                margin-bottom: 5px;
+            }
+        }
+
+        /* Container pentru mesajul de întâmpinare */
+        .message-container {
+            position: absolute; /* Poziționăm absolut față de pagină */
+            top: 80px; /* Plasăm textul sub meniu (ajustabil după preferință) */
+            left: 30px; /* Plasăm textul la marginea din stânga */
+            font-size: 4rem;
+            font-weight: bold;
+            color: #690013; /* Culoare text "Bun venit" */
+        }
+
+        /* Sub-mesaj */
+        .sub-message {
+            position: absolute; /* Poziționăm absolut față de pagina */
+            top: 200px; /* Plasăm textul de sub mesaje mai jos */
+            left: 30px; /* Aliniem la marginea din stânga */
+            color: #a72f45; /* Culoarea roz deschis */
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Linie între "BUN VENIT!" și sub-mesaj */
+        .line {
+            position: absolute;
+            top: 170px; /* Mutăm linia mai jos, pentru a nu tăia mesajul */
+            left: 30px; /* Aliniem linia la stânga */
+            width: 150px; /* Linia va fi mai scurtă */
+            border-top: 4px solid #690013; /* Linie mai groasă */
+        }
+
+    </style>
 </head>
 
-<body class="background">
-    <div class="container">
+<body>
+    <!-- Meniu sus -->
+    <div class="menu">
+        <a href="/templates/pagina_cerere">TRIMITE CERERE</a>
+        <a href="/templates/avizier">AVIZIER</a>
+        <a href="/templates/score">SCOR</a>
+        <a href="/templates/pagina_event">CREEAZA EVENIMENTE</a>
+        <a href="/templates/viewEvents">VEZI EVENIMENTE</a>
+        <a href="/templates/myrequests">CERERILE MELE</a>
+    </div>
 
-        </div>
+    <!-- Container pentru mesajul de întâmpinare -->
+    <div class="message-container">
+        BUN VENIT, {{name}}!
+    </div>
 
-        <div class="form-container">
-            <div class="header">Bună, {{name}}!</div>
-            
-            <button class="button" onclick="window.location.href='/templates/pagina_cerere';">Trimite cerere</button>
-            <button class="button" onclick="window.location.href='/templates/avizier';">Avizier</button>
-            <button class="button" onclick="window.location.href='/templates/score';">Comunitate</button>
-            <button class="button">Întrebări</button>
-            <button class="button"onclick="window.location.href='/templates/myrequests';">Cererile Mele</button>
-        </div>
+    <!-- Linie între mesajul "BUN VENIT!" și sub-mesaj -->
+    <div class="line"></div>
 
-        </div>
+    <!-- Sub-mesaj -->
+    <div class="sub-message">
+        Împreună, facem cartierul mai bun!
     </div>
 </body>
 

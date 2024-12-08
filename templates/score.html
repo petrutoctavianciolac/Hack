@@ -6,10 +6,13 @@
     <title>Scoreboard</title>
     <link rel="stylesheet" href="/static/avizier.css">
 </head>
-<body>
-    <div class="button-container">
-        <button class="backButton" onclick="window.location.href='/templates/startPage';">Înapoi</button>
-    </div>
+
+<div class="button-container">
+    <button class="backButton" onclick="window.location.href='/templates/startPage';">Înapoi</button>
+</div>
+
+<body class = "creare-eveniment">
+
     <div class="container">
         <h1>Scoreboard</h1>
         <div class="scoreboard-table">
@@ -32,7 +35,11 @@
                     {% endfor %}
                 </tbody>
             </table>
+
         </div>
+        
+        
     </div>
+
 </body>
 </html>
